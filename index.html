@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assest/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assest/css/style.css">
+  <title>Product Management</title>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1 class="fw-bold text-uppercase text-center mb-5">Task Management System</h1>
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <form id="taskForm">
+          <div class="mb-3">
+            <label for="titleInput" class="form-label fw-bold text-uppercase">Title</label>
+            <input type="text" class="form-control fw-bold" placeholder="enter your title" id="titleInput" required>
+          </div>
+          <div class="mb-3">
+            <label for="descriptionInput" class="form-label fw-bold text-uppercase">Description</label>
+            <textarea class="form-control fw-bold" placeholder="enter your Description" id="descriptionInput"
+              rows="3"></textarea>
+          </div>
+          <div class="row mb-3">
+            <div class="col">
+              <label for="dueDateInput" class="form-label fw-bold text-uppercase">Due Date</label>
+              <input type="date" class="form-control fw-bold text-secondary" id="dueDateInput" required>
+            </div>
+            <div class="col">
+              <label for="priorityInput" class="form-label fw-bold text-uppercase">Priority</label>
+              <select class="form-select fw-bold text-secondary" id="priorityInput" required>
+                <option value="low" class="fw-bold">Low</option>
+                <option value="medium" class="fw-bold">Medium</option>
+                <option value="high" class="fw-bold">High</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary fw-bold mt-3">Add Task</button>
+          <button type="submit" onclick="updateInfo()" class="btn btn-primary fw-bold mt-3">update Task</button>
+        </form>
+      </div>
+    </div>
+    <div class="mt-5">
+      <h3 class="fw-bold text-uppercase">Filter by Priority</h3>
+      <div class="btn-group" role="group" aria-label="Priority Filter">
+        <button type="button" class="btn border border-3" onclick="filterTasks('low')">Low</button>
+        <button type="button" class="btn border border-3" onclick="filterTasks('medium')">Medium</button>
+        <button type="button" class="btn border border-3" onclick="filterTasks('high')">High</button>
+        <button type="button" class="btn border border-3" onclick="filterTasks('all')">All</button>
+      </div>
+    </div>
+    <h3 class="fw-bold text-uppercase mt-">Tasks</h3>
+    <div id="taskList" class="d-flex flex-wrap"></div>
+  </div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+<script src="assest/js/main.js"></script>
+<script src="assest/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</html>
