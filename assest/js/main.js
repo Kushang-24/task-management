@@ -1,128 +1,99 @@
-function addTask(event) {
-    event.preventDefault();
+var records = [
+    // { title: 'Create ATM', description: 'create a ATM machine', dueDate: '23/2/2024', priority: 'low' },
+];
+window.onload = function () {
+    records.push();
+    updateTable();
+}
+var edit_id;
 
+function addRecord() {
     const title = document.getElementById('titleInput').value;
     const description = document.getElementById('descriptionInput').value;
     const dueDate = document.getElementById('dueDateInput').value;
     const priority = document.getElementById('priorityInput').value;
 
-    if (!title || !dueDate) {
-        alert('Please provide a title and due date for the task.');
+    if (title === "" || description === "" || dueDate === "" || priority === "") {
+        document.getElementById('completeError').innerHTML = 'complete the Information !';
         return;
     }
 
-    const task = {
-        id: Date.now(),
-        title,
-        description,
-        dueDate,
-        priority
-    };
+    const record = { title, description, dueDate, priority };
+    records.push(record);
 
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    tasks.push(task);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    document.getElementById('taskForm').reset();
-    displayTasks();
-}
-function displayTasks() {
-    const taskList = document.getElementById('taskList');
-    taskList.innerHTML = '';
-
-    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
-    tasks.forEach(task => {
-        const taskItem = document.createElement('div');
-        taskItem.classList.add('task-item');
-        taskItem.innerHTML = `
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><strong>Title :</strong> ${task.title}</h5>
-                    <p class="card-text d-grid"><strong>Description :</strong> ${task.description}</p>
-                    <p class="card-text"><strong>Due Date:</strong> ${task.dueDate}</p>
-                    <p class="card-text"><strong>Priority:</strong> ${task.priority}</p>
-                    <button class="btn btn-warning btn-sm" onclick="editTask(${task.id})">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})">Delete</button>
-                </div>
-            </div>
-        `;
-        taskList.appendChild(taskItem);
-    });
+    updateTable();
+    saveToLocalStorage();
+    clearForm();
 }
 function updateInfo() {
-    let title = document.getElementById('titleInput').value;
-    let description = document.getElementById('descriptionInput').value;
-    let dueDate = document.getElementById('dueDateInput').value;
-    let priority = document.getElementById('priorityInput').value;
+    const Usertitle = document.getElementById('titleInput').value;
+    const Userdescription = document.getElementById('descriptionInput').value;
+    const UserdueDate = document.getElementById('dueDateInput').value;
+    const Userpriority = document.getElementById('priorityInput').value;
 
-    let recordObject = { title, description, dueDate, priority };
-    let upadtew = tasks.findIndex((val) => {
-        return val.title == recordObject.title;
+    let recordObject = { Usertitle, Userdescription, UserdueDate, Userpriority };
 
-    })
-    tasks[upadtew]=recordObject;
-    // let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    displayTasks();
-    // records[edit_id].name = Username;
-    // records[edit_id].age = Userage;
-    // records[edit_id].email = Useremail;
-    // updateTable();
-    // saveToLocalStorage();
+    records[edit_id].title = Usertitle;
+    records[edit_id].description = Userdescription;
+    records[edit_id].dueDate = UserdueDate;
+    records[edit_id].priority = Userpriority;
+    updateTable();
+    saveToLocalStorage();
+    clearForm();
 }
-function editTask(id) {
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    const taskIndex = tasks.findIndex(task => task.id === id);
-    // console.log(taskIndex);
-    document.getElementById('titleInput').value = tasks[taskIndex].title;
-    document.getElementById('descriptionInput').value = tasks[taskIndex].description;
-    document.getElementById('dueDateInput').value = tasks[taskIndex].dueDate;
-    document.getElementById('priorityInput').value = tasks[taskIndex].priority;
-    // if (taskIndex !== -1) {
-    //     const editedTask = tasks[taskIndex];
-    //     console.log(editedTask);
-    // }
-}
+function updateTable() {
+    const tableBody = document.getElementById('recordsTableBody');
+    tableBody.innerHTML = '';
 
-function deleteTask(id) {
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    tasks = tasks.filter(task => task.id !== id);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    displayTasks();
-}
-
-function filterTasks(priority) {
-    let filteredTasks = [];
-    if (priority === 'all') {
-        filteredTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    } else {
-        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        filteredTasks = tasks.filter(task => task.priority === priority);
-    }
-    displayFilteredTasks(filteredTasks);
-}
-
-function displayFilteredTasks(tasks) {
-    const taskList = document.getElementById('taskList');
-    taskList.innerHTML = '';
-
-    tasks.forEach(task => {
-        const taskItem = document.createElement('div');
-        taskItem.classList.add('task-item');
-        taskItem.innerHTML = `
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">${task.title}</h5>
-                    <p class="card-text">${task.description}</p>
-                    <p class="card-text"><strong>Due Date:</strong> ${task.dueDate}</p>
-                    <p class="card-text"><strong>Priority:</strong> ${task.priority}</p>
-                    <button class="btn btn-warning btn-sm" onclick="editTask(${task.id})">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})">Delete</button>
-                </div>
+    records.forEach((record, id) => {
+        const row = tableBody.insertRow();
+        row.innerHTML = `
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">${record.title}</h5>
+                <p class="card-text"><strong class="d-table">Description :</strong> ${record.description}</p>
+                <p class="card-text"><strong>Due Date:</strong> ${record.dueDate}</p>
+                <p class="card-text"><strong>Priority:</strong> ${record.priority}</p>
+                <button class="btn btn-warning btn-sm" onclick="editRecord(${id})">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteRecord(${record.id})">Delete</button>
             </div>
-        `;
-        taskList.appendChild(taskItem);
+        </div>`;
     });
-}
 
-document.getElementById('taskForm').addEventListener('submit', addTask);
-displayTasks();
+}
+function editRecord(id) {
+    console.log(id)
+    edit_id = id
+    const record = records[id];
+    document.getElementById('titleInput').value = record.title;
+    document.getElementById('descriptionInput').value = record.description;
+    document.getElementById('dueDateInput').value = record.dueDate;
+    document.getElementById('priorityInput').value = record.priority;
+
+    updateTable();
+    saveToLocalStorage();
+}
+function deleteRecord(id) {
+    records = records.filter(record => record.id !== id);
+
+    updateTable();
+    saveToLocalStorage();
+}
+function clearForm() {
+    document.getElementById('titleInput').value = '';
+    document.getElementById('descriptionInput').value = '';
+    document.getElementById('dueDateInput').innerHTML = '';
+    // document.getElementById('priorityInput').innerHTML = '';
+
+}
+function saveToLocalStorage() {
+    localStorage.setItem('records', JSON.stringify(records));
+}
+function loadFromLocalStorage() {
+    const storedRecords = localStorage.getItem('records');
+    if (storedRecords) {
+        records = JSON.parse(storedRecords);
+        updateTable();
+    }
+}
+loadFromLocalStorage();

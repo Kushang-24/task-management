@@ -1,5 +1,11 @@
-.task-item {
-    margin-bottom: 20px;
-    width: 23%;
-    margin-left: 20px;
+body {
+    padding: 20px;
+}
+
+.details-m {
+    margin-top: 12%;
+}
+
+.form-m {
+    margin-top: 6%;
 }

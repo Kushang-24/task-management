@@ -7,54 +7,52 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="assest/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="assest/css/style.css">
+  <link rel="stylesheet" href="assest/css/media.css">
   <title>Product Management</title>
 </head>
 
 <body>
-  <div class="container mt-5">
-    <h1 class="fw-bold text-uppercase text-center mb-5">Task Management System</h1>
-    <div class="row justify-content-center">
-      <div class="col-6">
-        <form id="taskForm">
-          <div class="mb-3">
+  <div class="container" style="margin-top: 15%;">
+    <div class="row">
+      <div class="col-lg-8 col-sm-12 mt-5 overflow-x-auto">
+        <h2 class="text-uppercase fw-bold">Task</h2>
+        <table class="table table-striped table-secondary mt-4">
+          <tbody id="recordsTableBody"></tbody>
+        </table>
+      </div>
+      <div class="col-lg-4 col-sm-12">
+        <h2 class="text-uppercase fw-bold details-m">TASK MANAGEMENT</h2>
+        <form id="crudForm" class="form-m">
+          <div class="form-group">
+            <span id="completeError" class="text-danger fw-bold d-block text-center justify-content-center"></span><br>
             <label for="titleInput" class="form-label fw-bold text-uppercase">Title</label>
             <input type="text" class="form-control fw-bold" placeholder="enter your title" id="titleInput" required>
+            <br>
           </div>
-          <div class="mb-3">
+          <div class="form-group">
             <label for="descriptionInput" class="form-label fw-bold text-uppercase">Description</label>
             <textarea class="form-control fw-bold" placeholder="enter your Description" id="descriptionInput"
               rows="3"></textarea>
           </div>
-          <div class="row mb-3">
-            <div class="col">
-              <label for="dueDateInput" class="form-label fw-bold text-uppercase">Due Date</label>
-              <input type="date" class="form-control fw-bold text-secondary" id="dueDateInput" required>
-            </div>
-            <div class="col">
-              <label for="priorityInput" class="form-label fw-bold text-uppercase">Priority</label>
-              <select class="form-select fw-bold text-secondary" id="priorityInput" required>
-                <option value="low" class="fw-bold">Low</option>
-                <option value="medium" class="fw-bold">Medium</option>
-                <option value="high" class="fw-bold">High</option>
-              </select>
-            </div>
+          <div class="form-group" class="text-uppercase fw-bold">
+            <label for="dueDateInput" class="form-label fw-bold text-uppercase">Due Date</label>
+            <input type="date" class="form-control fw-bold text-secondary" id="dueDateInput" required>
+            <span id="emailError" class="text-danger fw-bold"></span><br>
           </div>
-          <button type="submit" class="btn btn-primary fw-bold mt-3">Add Task</button>
-          <button type="submit" onclick="updateInfo()" class="btn btn-primary fw-bold mt-3">update Task</button>
+          <div class="form-group" class="text-uppercase fw-bold">
+            <label for="priorityInput" class="form-label fw-bold text-uppercase">Priority</label>
+            <select class="form-select fw-bold text-secondary" id="priorityInput" required>
+              <option value="low" class="fw-bold">Low</option>
+              <option value="medium" class="fw-bold">Medium</option>
+              <option value="high" class="fw-bold">High</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-dark mt-4 fw-bold" onclick="addRecord()">Add Task</button>
+          <button type="button" class="btn btn-dark mt-4 fw-bold" id="demo" onclick="updateInfo()">update
+            Task</button>
         </form>
       </div>
     </div>
-    <div class="mt-5">
-      <h3 class="fw-bold text-uppercase">Filter by Priority</h3>
-      <div class="btn-group" role="group" aria-label="Priority Filter">
-        <button type="button" class="btn border border-3" onclick="filterTasks('low')">Low</button>
-        <button type="button" class="btn border border-3" onclick="filterTasks('medium')">Medium</button>
-        <button type="button" class="btn border border-3" onclick="filterTasks('high')">High</button>
-        <button type="button" class="btn border border-3" onclick="filterTasks('all')">All</button>
-      </div>
-    </div>
-    <h3 class="fw-bold text-uppercase mt-">Tasks</h3>
-    <div id="taskList" class="d-flex flex-wrap"></div>
   </div>
 
 </body>
