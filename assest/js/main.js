@@ -1,99 +1,108 @@
-var records = [
-    // { title: 'Create ATM', description: 'create a ATM machine', dueDate: '23/2/2024', priority: 'low' },
-];
-window.onload = function () {
-    records.push();
-    updateTable();
-}
-var edit_id;
+document.addEventListener('DOMContentLoaded', () => {
+    displayTasks();
+});
 
-function addRecord() {
-    const title = document.getElementById('titleInput').value;
-    const description = document.getElementById('descriptionInput').value;
-    const dueDate = document.getElementById('dueDateInput').value;
-    const priority = document.getElementById('priorityInput').value;
-
-    if (title === "" || description === "" || dueDate === "" || priority === "") {
-        document.getElementById('completeError').innerHTML = 'complete the Information !';
-        return;
+class Task {
+    constructor(title, description, dueDate, priority) {
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.priority = priority;
     }
-
-    const record = { title, description, dueDate, priority };
-    records.push(record);
-
-    updateTable();
-    saveToLocalStorage();
-    clearForm();
 }
-function updateInfo() {
-    const Usertitle = document.getElementById('titleInput').value;
-    const Userdescription = document.getElementById('descriptionInput').value;
-    const UserdueDate = document.getElementById('dueDateInput').value;
-    const Userpriority = document.getElementById('priorityInput').value;
 
-    let recordObject = { Usertitle, Userdescription, UserdueDate, Userpriority };
+document.getElementById('taskForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('title').value;
+    const description = document.getElementById('description').value;
+    const dueDate = document.getElementById('dueDate').value;
+    const priority = document.getElementById('priority').value;
 
-    records[edit_id].title = Usertitle;
-    records[edit_id].description = Userdescription;
-    records[edit_id].dueDate = UserdueDate;
-    records[edit_id].priority = Userpriority;
-    updateTable();
-    saveToLocalStorage();
-    clearForm();
+    if (title && description && dueDate && priority) {
+        const task = new Task(title, description, dueDate, priority);
+        addTask(task);
+        document.getElementById('taskForm').reset();
+    } else {
+        alert("All fields are required!");
+    }
+});
+
+function addTask(task) {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.push(task);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    displayTasks();
 }
-function updateTable() {
-    const tableBody = document.getElementById('recordsTableBody');
-    tableBody.innerHTML = '';
 
-    records.forEach((record, id) => {
-        const row = tableBody.insertRow();
-        row.innerHTML = `
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">${record.title}</h5>
-                <p class="card-text"><strong class="d-table">Description :</strong> ${record.description}</p>
-                <p class="card-text"><strong>Due Date:</strong> ${record.dueDate}</p>
-                <p class="card-text"><strong>Priority:</strong> ${record.priority}</p>
-                <button class="btn btn-warning btn-sm" onclick="editRecord(${id})">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteRecord(${record.id})">Delete</button>
-            </div>
-        </div>`;
+function displayTasks() {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const taskList = document.getElementById('taskList');
+    taskList.innerHTML = '';
+    tasks.forEach((task, index) => {
+        const card = `
+  <div class="card mb-3 me-3 col-3">
+    <div class="card-body">
+      <h5 class="fw-bold text-uppercase card-title ${isSearchedTask(task.title) ? 'task-title-searched' : ''}">${task.title}</h5>
+      <p class="card-text"><strong>Description : </strong> ${task.description}</p>
+      <h6 class="card-subtitle mb-2"><strong> Due Date :</strong> ${task.dueDate}</h6>
+      <p class="card-text"><strong> Priority :</strong> ${task.priority}</p>
+      <button class="btn btn-warning" onclick="editTask(${index})">Edit</button>
+      <button class="btn btn-danger" onclick="deleteTask(${index})">Delete</button>
+    </div>
+  </div>
+`;
+        taskList.innerHTML += card;
     });
+}
 
+function deleteTask(index) {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.splice(index, 1);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    displayTasks();
 }
-function editRecord(id) {
-    console.log(id)
-    edit_id = id
-    const record = records[id];
-    document.getElementById('titleInput').value = record.title;
-    document.getElementById('descriptionInput').value = record.description;
-    document.getElementById('dueDateInput').value = record.dueDate;
-    document.getElementById('priorityInput').value = record.priority;
 
-    updateTable();
-    saveToLocalStorage();
+function editTask(index) {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const task = tasks[index];
+    document.getElementById('title').value = task.title;
+    document.getElementById('description').value = task.description;
+    document.getElementById('dueDate').value = task.dueDate;
+    document.getElementById('priority').value = task.priority;
+    deleteTask(index);
 }
-function deleteRecord(id) {
-    records = records.filter(record => record.id !== id);
 
-    updateTable();
-    saveToLocalStorage();
+function isSearchedTask(title) {
+    const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
+    return title.toLowerCase().includes(searchInput);
 }
-function clearForm() {
-    document.getElementById('titleInput').value = '';
-    document.getElementById('descriptionInput').value = '';
-    document.getElementById('dueDateInput').innerHTML = '';
-    // document.getElementById('priorityInput').innerHTML = '';
 
-}
-function saveToLocalStorage() {
-    localStorage.setItem('records', JSON.stringify(records));
-}
-function loadFromLocalStorage() {
-    const storedRecords = localStorage.getItem('records');
-    if (storedRecords) {
-        records = JSON.parse(storedRecords);
-        updateTable();
+function searchTask() {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const taskList = document.getElementById('taskList');
+    taskList.innerHTML = '';
+    const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
+    const filteredTasks = tasks.filter(task => task.title.toLowerCase().includes(searchInput));
+    if (filteredTasks.length > 0) {
+        filteredTasks.forEach(task => {
+            const card = `
+    <div class="card mb-3 col-3">
+      <div class="card-body">
+        <h5 class="card-title task-title-searched">${task.title}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Due Date: ${task.dueDate}</h6>
+        <p class="card-text">Description: ${task.description}</p>
+        <p class="card-text">Priority: ${task.priority}</p>
+      </div>
+    </div>
+  `;
+            taskList.innerHTML += card;
+        });
+    } else {
+        alert("No tasks found with the given title.");
     }
 }
-loadFromLocalStorage();
+
+function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    displayTasks();
+}

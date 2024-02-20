@@ -1,11 +1,20 @@
-body {
-    padding: 20px;
+.task-title-searched {
+    color: black;
 }
 
-.details-m {
-    margin-top: 12%;
+.container-cutom {
+    margin: auto;
+    max-width: 1630px;
 }
 
-.form-m {
-    margin-top: 6%;
+.col-3 {
+    width: 30% !important;
+}
+
+.row {
+    justify-content: space-evenly !important;
+    flex-wrap: nowrap !important;
+}
+.fw-wg{
+    font-weight: 400 !important;
 }

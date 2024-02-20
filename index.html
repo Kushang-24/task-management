@@ -12,45 +12,48 @@
 </head>
 
 <body>
-  <div class="container" style="margin-top: 15%;">
-    <div class="row">
-      <div class="col-lg-8 col-sm-12 mt-5 overflow-x-auto">
-        <h2 class="text-uppercase fw-bold">Task</h2>
-        <table class="table table-striped table-secondary mt-4">
-          <tbody id="recordsTableBody"></tbody>
-        </table>
+  <header class="p-3 bg-dark text-white">
+    <div class="container">
+      <div class="row">
+        <h1>Task Management System</h1>
+        <div class="input-group mb-3 col-3">
+          <input type="text" id="searchInput" class="form-control w-50 fw-bold" placeholder="Search Task Title">
+          <button class="btn border border-1 fw-wg text-white text-secondary" type="button" onclick="searchTask()">Search</button>
+          <button class="btn border border-1 fw-wg text-white text-secondary" type="button" onclick="clearSearch()">Clear Search</button>
+        </div>
       </div>
-      <div class="col-lg-4 col-sm-12">
-        <h2 class="text-uppercase fw-bold details-m">TASK MANAGEMENT</h2>
-        <form id="crudForm" class="form-m">
-          <div class="form-group">
-            <span id="completeError" class="text-danger fw-bold d-block text-center justify-content-center"></span><br>
-            <label for="titleInput" class="form-label fw-bold text-uppercase">Title</label>
-            <input type="text" class="form-control fw-bold" placeholder="enter your title" id="titleInput" required>
-            <br>
+    </div>
+  </header>
+  <div class="container-cutom mt-4">
+    <div class="row">
+      <div class="col-sm-12 col-lg-4">
+        <form id="taskForm">
+          <div class="mb-3">
+            <label for="title" class="form-label fw-bold text-uppercase">Title</label>
+            <input type="text" class="form-control fw-bold" id="title" required placeholder="Enter the Title">
           </div>
-          <div class="form-group">
-            <label for="descriptionInput" class="form-label fw-bold text-uppercase">Description</label>
-            <textarea class="form-control fw-bold" placeholder="enter your Description" id="descriptionInput"
-              rows="3"></textarea>
+          <div class="mb-3">
+            <label for="description" class="form-label fw-bold text-uppercase">Description</label>
+            <textarea class="form-control fw-bold" id="description" rows="3" required
+              placeholder="Enter the Description"></textarea>
           </div>
-          <div class="form-group" class="text-uppercase fw-bold">
-            <label for="dueDateInput" class="form-label fw-bold text-uppercase">Due Date</label>
-            <input type="date" class="form-control fw-bold text-secondary" id="dueDateInput" required>
-            <span id="emailError" class="text-danger fw-bold"></span><br>
+          <div class="mb-3">
+            <label for="dueDate" class="form-label fw-bold text-uppercase">Due Date</label>
+            <input type="date" class="form-control fw-bold text-secondary" id="dueDate" required>
           </div>
-          <div class="form-group" class="text-uppercase fw-bold">
-            <label for="priorityInput" class="form-label fw-bold text-uppercase">Priority</label>
-            <select class="form-select fw-bold text-secondary" id="priorityInput" required>
+          <div class="mb-3">
+            <label for="priority" class="form-label fw-bold text-uppercase">Priority</label>
+            <select class="form-select text-secondary fw-bold" id="priority" required>
               <option value="low" class="fw-bold">Low</option>
               <option value="medium" class="fw-bold">Medium</option>
               <option value="high" class="fw-bold">High</option>
             </select>
           </div>
-          <button type="button" class="btn btn-dark mt-4 fw-bold" onclick="addRecord()">Add Task</button>
-          <button type="button" class="btn btn-dark mt-4 fw-bold" id="demo" onclick="updateInfo()">update
-            Task</button>
+          <button type="submit" class="btn btn-primary fw-bold">Add Task</button>
         </form>
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <div id="taskList" class="d-flex flex-wrap"></div>
       </div>
     </div>
   </div>
